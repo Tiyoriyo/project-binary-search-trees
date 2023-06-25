@@ -2,20 +2,10 @@
 /* eslint-disable no-shadow */
 /* eslint-disable prefer-const */
 /* eslint-disable import/extensions */
+import node from './node.js';
 import mergeSort from './mergeSort.js';
 import duplicateRemover from './duplicateRemover.js';
-
-const node = (value) => ({
-  root: value,
-  left: null,
-  right: null,
-  setLeft(x) {
-    this.left = x;
-  },
-  setRight(x) {
-    this.right = x;
-  },
-});
+import prettyPrint from './prettyPrint.js';
 
 const tree = (array) => {
   let data = mergeSort(
@@ -35,16 +25,6 @@ const tree = (array) => {
   };
 };
 
-const prettyPrint = (node, prefix = '', isLeft = true) => {
-  if (node === null) return;
-  if (node.right !== null) {
-    prettyPrint(node.right, `${prefix}${isLeft ? '│   ' : '    '}`, false);
-  }
-  console.log(`${prefix}${isLeft ? '└── ' : '┌── '}${node.root}`);
-  if (node.left !== null) {
-    prettyPrint(node.left, `${prefix}${isLeft ? '    ' : '│   '}`, true);
-  }
-};
 const treeArray = tree([3, 3, 3, 1, 2, 3, 4]);
 // 2, 3, 4, 5, 6, 8, 10
 console.log(prettyPrint(treeArray.root));
