@@ -22,8 +22,7 @@ const tree = (array) => {
   }
 
   function insertRec(root, value) {
-    if (root === null) { return node(value); }
-
+    if (root === null) return node(value);
     if (value > root.root) {
       root.setRight(insertRec(root.right, value));
     } else if (value < root.root) {
@@ -52,6 +51,8 @@ treeArray.insert(37);
 treeArray.insert(33);
 treeArray.insert(1);
 treeArray.insert(-12);
+treeArray.insert(-12);
+treeArray.insert(-13);
 console.log(prettyPrint(treeArray.root));
 
 // if (start > end) return null;
