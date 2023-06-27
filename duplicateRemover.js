@@ -9,7 +9,3 @@ function duplicateRemover(array) {
 }
 
 export default duplicateRemover;
-
-console.log(duplicateRemover([3, 3, 3, 1, 2, 3, 4]));
-
-console.log([4, 3, 2].indexOf(9));
