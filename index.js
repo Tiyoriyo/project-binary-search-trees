@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-console */
 /* eslint-disable no-shadow */
 /* eslint-disable prefer-const */
@@ -16,45 +17,47 @@ const tree = (array) => {
     if (start > end) return null;
     const mid = Math.floor((start + end) / 2);
     const root = node(data[mid]);
-    root.setLeft(buildTree(start, mid - 1));
-    root.setRight(buildTree(mid + 1, end));
+    root.left = buildTree(start, mid - 1);
+    root.right = buildTree(mid + 1, end);
     return root;
   }
 
   function insertRec(root, value) {
     if (root === null) return node(value);
-    if (value > root.root) {
-      root.setRight(insertRec(root.right, value));
-    } else if (value < root.root) {
-      root.setLeft(insertRec(root.left, value));
+    if (value > root.value) {
+      root.right = insertRec(root.right, value);
+    } else if (value < root.value) {
+      root.left = insertRec(root.left, value);
     }
     return root;
+  }
+
+  function findMin(node) {
+    let temp = node.right;
+    while (temp.left) { temp = temp.left; }
+    return temp.value;
   }
 
   function deleteRec(root, value) {
-    if (root.root === value) {
-      if (!root.left && !root.right) return null;
+    if (!root.left && !root.right) return null;
+    if (value < root.value) {
+      root.left = deleteRec(root.left, value);
+    } else if (value > root.value) {
+      root.right = deleteRec(root.right, value);
+    } else { // If root value equals given value
       if (root.left && !root.right) return root.left;
       if (root.right && !root.left) return root.right;
-      if (root.left && root.right) {
-        let target = root;
-        let temp = target.right;
-        while (temp.left) { temp = temp.left; }
-        target.root = temp.root;
-        target.setRight(deleteRec(target.right, temp.root));
-        return target;
+      if (root.right && root.left) {
+        let tempValue = findMin(root);
+        root.value = tempValue;
+        root.right = deleteRec(root.right, tempValue);
+        return root;
       }
-    }
-
-    if (value > root.root) {
-      root.setRight(deleteRec(root.right, value));
-    } else if (value < root.root) {
-      root.setLeft(deleteRec(root.left, value));
     }
     return root;
   }
 
-  function insert(value) {
+  function insertValue(value) {
     this.root = insertRec(this.root, value);
   }
 
@@ -64,29 +67,16 @@ const tree = (array) => {
 
   return {
     root: buildTree(0, data.length - 1),
-    insert,
+    insertValue,
     deleteValue,
   };
 };
 
-const treeArray = tree([50, 23, 23, 10, 25, 34, 44]);
+const treeArray = tree([50, 25, 5, 0, 75, 15]);
 // 2, 3, 4, 5, 6, 8, 10
 
-treeArray.insert(2);
-treeArray.insert(12);
-treeArray.insert(12);
-treeArray.insert(37);
-treeArray.insert(33);
-treeArray.insert(1);
-treeArray.insert(-12);
-treeArray.insert(-12);
-treeArray.insert(-13);
-treeArray.insert(74);
-treeArray.insert(333);
-treeArray.insert(200);
-treeArray.insert(45);
-treeArray.insert(46);
-treeArray.insert(47);
+treeArray.insertValue(65);
+treeArray.insertValue(63);
 treeArray.deleteValue(50);
 console.log(prettyPrint(treeArray.root));
 
