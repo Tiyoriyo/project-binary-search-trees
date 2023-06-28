@@ -1,5 +1,6 @@
+/* eslint-disable object-shorthand */
 const node = (value) => ({
-  value,
+  value: value,
   left: null,
   right: null,
 });
