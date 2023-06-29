@@ -58,13 +58,13 @@ const tree = (array) => {
   }
 
   function find(root, value) {
+    if (!root) return null;
     if (value < root.value) {
       return find(root.left, value);
     } if (value > root.value) {
       return find(root.right, value);
     }
     if (value === root.value) { return root; }
-    if (!root.left && !root.right) return null;
   }
 
   function insertValue(value) {
@@ -79,11 +79,33 @@ const tree = (array) => {
     return find(this.root, value);
   }
 
+  function levelOrderRec(root, callback) {
+    if (!root) return null;
+    let queue = [];
+    let array = [];
+    queue.push(root);
+    while (queue.length) {
+      let current = queue[0];
+      array.push(current.value);
+      if (current.left) queue.push(current.left);
+      if (current.right) queue.push(current.right);
+      queue.shift();
+    }
+    return array;
+  }
+
+  // root15, 15,
+
+  function levelOrder(callback) {
+    return levelOrderRec(this.root, callback);
+  }
+
   return {
     root: buildTree(0, data.length - 1),
     insertValue,
     deleteValue,
     findPre,
+    levelOrder,
   };
 };
 
@@ -93,7 +115,7 @@ const treeArray = tree([50, 25, 5, 0, 75, 15]);
 treeArray.insertValue(65);
 treeArray.insertValue(63);
 treeArray.deleteValue(50);
-console.log(treeArray.findPre(63));
+console.log(treeArray.levelOrder());
 console.log(prettyPrint(treeArray.root));
 
 // if (start > end) return null;
