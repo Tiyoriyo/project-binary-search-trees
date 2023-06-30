@@ -88,7 +88,6 @@ const tree = (array) => {
     if (root.left) array = array.concat(inorderRec(root.left));
     array.push(root.value);
     if (root.right) array = array.concat(inorderRec(root.right));
-
     return array;
   }
 
@@ -98,7 +97,6 @@ const tree = (array) => {
     array.push(root.value);
     if (root.left) array = array.concat(preorderRec(root.left));
     if (root.right) array = array.concat(preorderRec(root.right));
-
     return array;
   }
 
@@ -108,8 +106,15 @@ const tree = (array) => {
     if (root.left) array = array.concat(postorderRec(root.left));
     if (root.right) array = array.concat(postorderRec(root.right));
     array.push(root.value);
-
     return array;
+  }
+
+  function heightRec(root) {
+    if (!root) return 0;
+
+    let leftH = heightRec(root.left);
+    let rightH = heightRec(root.right);
+    return Math.max(leftH, rightH) + 1;
   }
 
   function insertValue(value) {
@@ -140,6 +145,10 @@ const tree = (array) => {
     return postorderRec(this.root, callback);
   }
 
+  function height() {
+    return heightRec(this.root) - 1;
+  }
+
   return {
     root: buildTree(0, data.length - 1),
     insertValue,
@@ -149,6 +158,7 @@ const tree = (array) => {
     inorder,
     preorder,
     postorder,
+    height,
   };
 };
 
@@ -157,11 +167,13 @@ const treeArray = tree([50, 25, 5, 0, 75, 15]);
 
 treeArray.insertValue(65);
 treeArray.insertValue(63);
-treeArray.deleteValue(50);
+treeArray.insertValue(52);
+
 // console.log(treeArray.levelOrder());
-console.log('Inorder:', treeArray.inorder());
-console.log('Preorder:', treeArray.preorder());
-console.log('Postorder:', treeArray.postorder());
+// console.log('Inorder:', treeArray.inorder());
+// console.log('Preorder:', treeArray.preorder());
+// console.log('Postorder:', treeArray.postorder());
+console.log('Height:', treeArray.height());
 console.log(prettyPrint(treeArray.root));
 
 // if (start > end) return null;
