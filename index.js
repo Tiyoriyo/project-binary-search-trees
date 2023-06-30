@@ -111,10 +111,19 @@ const tree = (array) => {
 
   function heightRec(root) {
     if (!root) return 0;
-
     let leftH = heightRec(root.left);
     let rightH = heightRec(root.right);
     return Math.max(leftH, rightH) + 1;
+  }
+
+  function depthRec(root, value) {
+    if (!root) return -Infinity;
+    if (value > root.value) {
+      return depthRec(root.right, value) + 1;
+    } if (value < root.value) {
+      return depthRec(root.left, value) + 1;
+    }
+    return 1;
   }
 
   function insertValue(value) {
@@ -149,6 +158,11 @@ const tree = (array) => {
     return heightRec(this.root) - 1;
   }
 
+  function depth(value) {
+    let result = depthRec(this.root, value) - 1;
+    return (result >= 0) ? result : null;
+  }
+
   return {
     root: buildTree(0, data.length - 1),
     insertValue,
@@ -159,6 +173,7 @@ const tree = (array) => {
     preorder,
     postorder,
     height,
+    depth,
   };
 };
 
@@ -173,7 +188,7 @@ treeArray.insertValue(52);
 // console.log('Inorder:', treeArray.inorder());
 // console.log('Preorder:', treeArray.preorder());
 // console.log('Postorder:', treeArray.postorder());
-console.log('Height:', treeArray.height());
+console.log('Depth:', treeArray.depth(5));
 console.log(prettyPrint(treeArray.root));
 
 // if (start > end) return null;
