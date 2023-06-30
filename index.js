@@ -67,19 +67,7 @@ const tree = (array) => {
     if (value === root.value) { return root; }
   }
 
-  function insertValue(value) {
-    this.root = insertRec(this.root, value);
-  }
-
-  function deleteValue(value) {
-    this.root = deleteRec(this.root, value);
-  }
-
-  function findPre(value) {
-    return find(this.root, value);
-  }
-
-  function levelOrderRec(root, callback) {
+  function levelOrderItr(root, callback) {
     if (!root) return null;
     let queue = [];
     let array = [];
@@ -94,10 +82,62 @@ const tree = (array) => {
     return array;
   }
 
-  // root15, 15,
+  function inorderRec(root, callback) {
+    if (!root) return null;
+    let array = [];
+    if (root.left) array = array.concat(inorderRec(root.left));
+    array.push(root.value);
+    if (root.right) array = array.concat(inorderRec(root.right));
+
+    return array;
+  }
+
+  function preorderRec(root, callback) {
+    if (!root) return null;
+    let array = [];
+    array.push(root.value);
+    if (root.left) array = array.concat(preorderRec(root.left));
+    if (root.right) array = array.concat(preorderRec(root.right));
+
+    return array;
+  }
+
+  function postorderRec(root, callback) {
+    if (!root) return null;
+    let array = [];
+    if (root.left) array = array.concat(postorderRec(root.left));
+    if (root.right) array = array.concat(postorderRec(root.right));
+    array.push(root.value);
+
+    return array;
+  }
+
+  function insertValue(value) {
+    this.root = insertRec(this.root, value);
+  }
+
+  function deleteValue(value) {
+    this.root = deleteRec(this.root, value);
+  }
+
+  function findPre(value) {
+    return find(this.root, value);
+  }
 
   function levelOrder(callback) {
-    return levelOrderRec(this.root, callback);
+    return levelOrderItr(this.root, callback);
+  }
+
+  function inorder(callback) {
+    return inorderRec(this.root, callback);
+  }
+
+  function preorder(callback) {
+    return preorderRec(this.root, callback);
+  }
+
+  function postorder(callback) {
+    return postorderRec(this.root, callback);
   }
 
   return {
@@ -106,6 +146,9 @@ const tree = (array) => {
     deleteValue,
     findPre,
     levelOrder,
+    inorder,
+    preorder,
+    postorder,
   };
 };
 
@@ -115,7 +158,10 @@ const treeArray = tree([50, 25, 5, 0, 75, 15]);
 treeArray.insertValue(65);
 treeArray.insertValue(63);
 treeArray.deleteValue(50);
-console.log(treeArray.levelOrder());
+// console.log(treeArray.levelOrder());
+console.log('Inorder:', treeArray.inorder());
+console.log('Preorder:', treeArray.preorder());
+console.log('Postorder:', treeArray.postorder());
 console.log(prettyPrint(treeArray.root));
 
 // if (start > end) return null;
