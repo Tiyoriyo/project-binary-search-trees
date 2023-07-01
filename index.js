@@ -40,7 +40,14 @@ const tree = (array) => {
     return temp.value;
   }
 
+  // Finished
   function deleteVal(value) {
+    const findMin = (node) => {
+      let temp = node.right;
+      while (temp.left) { temp = temp.left; }
+      return temp.value;
+    };
+
     const deleteRec = (value, root) => {
       if (!root.left && !root.right) return null;
       if (value < root.value) {
