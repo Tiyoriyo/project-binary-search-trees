@@ -129,13 +129,6 @@ const tree = (array) => {
     return height - 1;
   }
 
-  function balancedCheck(root = this.root) {
-    let leftH = height(root.left); // Left Subtree Height
-    let rightH = height(root.right); // Right Subtree Height
-    let difference = Math.abs((leftH - rightH)); // Difference
-    return !(difference > 1);
-  }
-
   function depth(value) {
     const depthRec = (value, root = this.root) => {
       if (!root) return -Infinity;
@@ -149,6 +142,13 @@ const tree = (array) => {
 
     let result = depthRec(value) - 1;
     return (result >= 0) ? result : null;
+  }
+
+  function balancedCheck(root = this.root) {
+    let leftH = height(root.left); // Left Subtree Height
+    let rightH = height(root.right); // Right Subtree Height
+    let difference = Math.abs((leftH - rightH)); // Difference
+    return !(difference > 1);
   }
 
   function rebalance() {
