@@ -13,7 +13,6 @@ const tree = (array) => {
     duplicateRemover(array),
   );
 
-  // FINISHED
   function buildTree(start, end) {
     if (start > end) return null;
     const mid = Math.floor((start + end) / 2);
@@ -23,25 +22,21 @@ const tree = (array) => {
     return root;
   }
 
-  // FINISHED
-  function insertVal(value, root = this.root) {
-    if (root === null) return node(value);
-    if (value > root.value) {
-      root.right = insertVal(value, root.right);
-    } else if (value < root.value) {
-      root.left = insertVal(value, root.left);
+  function insertVal(value) {
+    function insertRec(value, root = this.root) {
+      if (root === null) return node(value);
+      if (value > root.value) {
+        root.right = insertRec(value, root.right);
+      } else if (value < root.value) {
+        root.left = insertRec(value, root.left);
+      }
+      return root;
     }
-    return root;
+    this.root = insertRec(value, this.root);
   }
 
-  function findMin(node) {
-    let temp = node.right;
-    while (temp.left) { temp = temp.left; }
-    return temp.value;
-  }
-
-  // Finished
   function deleteVal(value) {
+    if (!value) return;
     const findMin = (node) => {
       let temp = node.right;
       while (temp.left) { temp = temp.left; }
@@ -49,12 +44,13 @@ const tree = (array) => {
     };
 
     const deleteRec = (value, root) => {
-      if (!root.left && !root.right) return null;
+      if (!root) return null;
       if (value < root.value) {
         root.left = deleteRec(value, root.left);
       } else if (value > root.value) {
         root.right = deleteRec(value, root.right);
       } else { // If root value equals given value
+        if (!root.left && !root.right) return null;
         if (root.left && !root.right) return root.left;
         if (root.right && !root.left) return root.right;
         if (root.right && root.left) {
@@ -70,23 +66,24 @@ const tree = (array) => {
   }
 
   function find(value, root = this.root) {
-    if (!root) return null;
+    if (!root) return 'Error: Node with value does not exist';
     if (value < root.value) {
       return find(value, root.left);
     } if (value > root.value) {
       return find(value, root.right);
     }
-    if (value === root.value) { return root; }
+    return root;
   }
 
-  function levelOrderItr(root = this.root, callback = undefined) {
+  function levelOrderItr(callback = undefined, root = this.root) {
     if (!root) return null;
     let queue = [];
     let array = [];
     queue.push(root);
+
     while (queue.length) {
       let current = queue[0];
-      array.push((callback) ? callback(root.value) : root.value);
+      array.push((callback) ? callback(current.value) : current.value);
       if (current.left) queue.push(current.left);
       if (current.right) queue.push(current.right);
       queue.shift();
@@ -97,9 +94,9 @@ const tree = (array) => {
   function inorder(root = this.root, callback = undefined) {
     if (!root) return null;
     let array = [];
-    if (root.left) array = array.concat(inorder(root.left));
+    if (root.left) array = array.concat(inorder(root.left, callback));
     array.push((callback) ? callback(root.value) : root.value);
-    if (root.right) array = array.concat(inorder(root.right));
+    if (root.right) array = array.concat(inorder(root.right, callback));
     return array;
   }
 
@@ -107,8 +104,8 @@ const tree = (array) => {
     if (!root) return null;
     let array = [];
     array.push((callback) ? callback(root.value) : root.value);
-    if (root.left) array = array.concat(preorder(root.left));
-    if (root.right) array = array.concat(preorder(root.right));
+    if (root.left) array = array.concat(preorder(root.left, callback));
+    if (root.right) array = array.concat(preorder(root.right, callback));
     return array;
   }
 
@@ -121,15 +118,17 @@ const tree = (array) => {
     return array;
   }
 
-  // Evaluate Whether important or NOT (Height not removing -1);
-  function height(root = this.root) {
-    if (!root) return 0;
-    let leftH = height(root.left);
-    let rightH = height(root.right);
-    return Math.max(leftH, rightH) + 1;
+  function height(root) {
+    const heightRec = (root = this.root) => {
+      if (!root) return 0;
+      let leftH = heightRec(root.left);
+      let rightH = heightRec(root.right);
+      return Math.max(leftH, rightH) + 1;
+    };
+    let height = heightRec(root);
+    return height - 1;
   }
 
-  // FINISHED
   function balancedCheck(root = this.root) {
     let leftH = height(root.left); // Left Subtree Height
     let rightH = height(root.right); // Right Subtree Height
@@ -137,23 +136,21 @@ const tree = (array) => {
     return !(difference > 1);
   }
 
-  // UNFINISHED
   function depth(value) {
-    function depthRec(value, root = this.root) {
+    const depthRec = (value, root = this.root) => {
       if (!root) return -Infinity;
       if (value > root.value) {
-        return depthRec(root.right, value) + 1;
+        return depthRec(value, root.right) + 1;
       } if (value < root.value) {
-        return depthRec(root.left, value) + 1;
+        return depthRec(value, root.left) + 1;
       }
       return 1;
-    }
+    };
 
     let result = depthRec(value) - 1;
     return (result >= 0) ? result : null;
   }
 
-  // FINISHED
   function rebalance() {
     let values = inorder(this.root); // Retrieve current values via traversal method
     data = mergeSort( // Sort values
@@ -214,9 +211,4 @@ function driverScript() {
   console.log('Post Order: ', treeArray.postorder());
 }
 
-// driverScript();
-
-// const treeArray = tree([0, 59, 23, 56, 47, 89, 48, 39, 6, 39, 28, 5, 4, 3, 45, 6, 7, 8]);
-const treeArray = tree([23, 5]);
-treeArray.deleteVal(5);
-console.log(prettyPrint(treeArray.root));
+driverScript();
