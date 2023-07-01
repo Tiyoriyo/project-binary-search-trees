@@ -13,10 +13,6 @@ const tree = (array) => {
     duplicateRemover(array),
   );
 
-  function processData(array) {
-    return mergeSort(duplicateRemover(array));
-  }
-
   function buildTree(start, end) {
     if (start > end) return null;
     const mid = Math.floor((start + end) / 2);
@@ -26,12 +22,12 @@ const tree = (array) => {
     return root;
   }
 
-  function insertRec(root, value) {
+  function insertVal(value, root = this.root) {
     if (root === null) return node(value);
     if (value > root.value) {
-      root.right = insertRec(root.right, value);
+      root.right = insertVal(value, root.right);
     } else if (value < root.value) {
-      root.left = insertRec(root.left, value);
+      root.left = insertVal(value, root.left);
     }
     return root;
   }
@@ -42,36 +38,36 @@ const tree = (array) => {
     return temp.value;
   }
 
-  function deleteRec(root, value) {
+  function deleteVal(value, root = this.root) {
     if (!root.left && !root.right) return null;
     if (value < root.value) {
-      root.left = deleteRec(root.left, value);
+      root.left = deleteVal(value, root.left);
     } else if (value > root.value) {
-      root.right = deleteRec(root.right, value);
+      root.right = deleteVal(value, root.right);
     } else { // If root value equals given value
       if (root.left && !root.right) return root.left;
       if (root.right && !root.left) return root.right;
       if (root.right && root.left) {
         let tempValue = findMin(root);
         root.value = tempValue;
-        root.right = deleteRec(root.right, tempValue);
+        root.right = deleteVal(tempValue, root.right);
         return root;
       }
     }
     return root;
   }
 
-  function find(root, value) {
+  function find(value, root = this.root) {
     if (!root) return null;
     if (value < root.value) {
-      return find(root.left, value);
+      return find(value, root.left);
     } if (value > root.value) {
-      return find(root.right, value);
+      return find(value, root.right);
     }
     if (value === root.value) { return root; }
   }
 
-  function levelOrderItr(root, callback) {
+  function levelOrderItr(root = this.root, callback = undefined) {
     if (!root) return null;
     let queue = [];
     let array = [];
@@ -86,41 +82,43 @@ const tree = (array) => {
     return array;
   }
 
-  function inorderRec(root, callback) {
+  function inorder(root = this.root, callback = undefined) {
     if (!root) return null;
     let array = [];
-    if (root.left) array = array.concat(inorderRec(root.left));
+    if (root.left) array = array.concat(inorder(root.left));
     array.push(root.value);
-    if (root.right) array = array.concat(inorderRec(root.right));
+    if (root.right) array = array.concat(inorder(root.right));
     return array;
   }
 
-  function preorderRec(root, callback) {
+  function preorder(root = this.root, callback = undefined) {
     if (!root) return null;
     let array = [];
     array.push(root.value);
-    if (root.left) array = array.concat(preorderRec(root.left));
-    if (root.right) array = array.concat(preorderRec(root.right));
+    if (root.left) array = array.concat(preorder(root.left));
+    if (root.right) array = array.concat(preorder(root.right));
     return array;
   }
 
-  function postorderRec(root, callback) {
+  function postorder(root = this.root, callback = undefined) {
     if (!root) return null;
     let array = [];
-    if (root.left) array = array.concat(postorderRec(root.left));
-    if (root.right) array = array.concat(postorderRec(root.right));
+    if (root.left) array = array.concat(postorder(root.left, callback));
+    if (root.right) array = array.concat(postorder(root.right, callback));
     array.push(root.value);
     return array;
   }
 
-  function heightRec(root) {
+  // Evaluate Whether important or NOT (Height not removing -1);
+  function height(root = this.root) {
     if (!root) return 0;
-    let leftH = heightRec(root.left);
-    let rightH = heightRec(root.right);
+    let leftH = height(root.left);
+    let rightH = height(root.right);
     return Math.max(leftH, rightH) + 1;
   }
 
-  function depthRec(root, value) {
+  // CHECK FIX FIGURE OUT
+  function depthRec(value, root = this.root) {
     if (!root) return -Infinity;
     if (value > root.value) {
       return depthRec(root.right, value) + 1;
@@ -130,81 +128,40 @@ const tree = (array) => {
     return 1;
   }
 
-  function isBalanced(root) {
-    let leftH = heightRec(root.left);
-    let rightH = heightRec(root.right);
-    let difference = (leftH - rightH) * -1;
+  // FINISHED
+  function balancedCheck(root = this.root) {
+    let leftH = height(root.left); // Left Subtree Height
+    let rightH = height(root.right); // Right Subtree Height
+    let difference = Math.abs((leftH - rightH)); // Difference
     return !(difference > 1);
   }
 
-  function rebalance(root) {
-    let values = inorderRec(root);
-    setData(values);
-    return buildTree(0, data.length - 1);
-  }
-
-  function insertValue(value) {
-    this.root = insertRec(this.root, value);
-  }
-
-  function deleteValue(value) {
-    this.root = deleteRec(this.root, value);
-  }
-
-  function findPre(value) {
-    return find(this.root, value);
-  }
-
-  function levelOrder(callback) {
-    return levelOrderItr(this.root, callback);
-  }
-
-  function inorder(callback) {
-    return inorderRec(this.root, callback);
-  }
-
-  function preorder(callback) {
-    return preorderRec(this.root, callback);
-  }
-
-  function postorder(callback) {
-    return postorderRec(this.root, callback);
-  }
-
-  function height() {
-    return heightRec(this.root) - 1;
-  }
-
+  // CHECK DEPTH FUNCTIONS
   function depth(value) {
     let result = depthRec(this.root, value) - 1;
     return (result >= 0) ? result : null;
   }
 
-  function balancedCheck() {
-    return isBalanced(this.root);
-  }
-
-  function makeBalanced() {
-    this.root = rebalance(this.root);
-  }
-
-  function setData(array) {
-    data = processData(array);
+  // FINISHED
+  function rebalance() {
+    let values = inorder(this.root); // Retrieve current values via traversal method
+    data = mergeSort(duplicateRemover(values)); // Sort values
+    this.root = buildTree(0, data.length - 1); // Replace current root with new balanced tree
   }
 
   return {
     root: buildTree(0, data.length - 1),
-    insertValue,
-    deleteValue,
-    findPre,
-    levelOrder,
+    insertVal,
+    deleteVal,
+    find,
+    levelOrderItr,
     inorder,
     preorder,
     postorder,
     height,
     depth,
     balancedCheck,
-    makeBalanced,
+    rebalance,
   };
 };
 
@@ -231,12 +188,12 @@ function driverScript() {
   (() => {
     for (let i = 0; i < 15; i += 1) {
       let number = Math.floor(Math.random() * 2000);
-      treeArray.insertValue(number);
+      treeArray.insertVal(number);
     }
   })();
   console.log(prettyPrint(treeArray.root));
   console.log('Balance Check: ', treeArray.balancedCheck());
-  treeArray.makeBalanced();
+  treeArray.rebalance();
   console.log(prettyPrint(treeArray.root));
   console.log('Balance Check: ', treeArray.balancedCheck());
   console.log('Pre Order: ', treeArray.preorder());
