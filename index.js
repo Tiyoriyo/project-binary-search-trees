@@ -13,6 +13,10 @@ const tree = (array) => {
     duplicateRemover(array),
   );
 
+  function processData(array) {
+    return mergeSort(duplicateRemover(array));
+  }
+
   function buildTree(start, end) {
     if (start > end) return null;
     const mid = Math.floor((start + end) / 2);
@@ -133,6 +137,12 @@ const tree = (array) => {
     return !((difference > 1));
   }
 
+  function rebalance(root) {
+    let values = inorderRec(root);
+    setData(values);
+    return buildTree(0, data.length - 1);
+  }
+
   function insertValue(value) {
     this.root = insertRec(this.root, value);
   }
@@ -174,6 +184,14 @@ const tree = (array) => {
     return isBalanced(this.root);
   }
 
+  function makeBalanced() {
+    this.root = rebalance(this.root);
+  }
+
+  function setData(array) {
+    data = processData(array);
+  }
+
   return {
     root: buildTree(0, data.length - 1),
     insertValue,
@@ -186,15 +204,22 @@ const tree = (array) => {
     height,
     depth,
     balancedCheck,
+    makeBalanced,
   };
 };
 
-const treeArray = tree([15, 50, 5, 0, 75, 25, 65, 63, 52]);
+const treeArray = tree([15, 50, 5, 0, 75, 25, 65]);
 // 2, 3, 4, 5, 6, 8, 10
 
-// treeArray.insertValue(65);
-// treeArray.insertValue(63);
-// treeArray.insertValue(52);
+treeArray.insertValue(65);
+treeArray.insertValue(63);
+treeArray.insertValue(52);
+treeArray.insertValue(51);
+treeArray.insertValue(49);
+treeArray.insertValue(53);
+treeArray.insertValue(54);
+treeArray.insertValue(55);
+treeArray.makeBalanced();
 
 // console.log(treeArray.levelOrder());
 // console.log('Inorder:', treeArray.inorder());
