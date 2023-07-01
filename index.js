@@ -74,7 +74,7 @@ const tree = (array) => {
     queue.push(root);
     while (queue.length) {
       let current = queue[0];
-      array.push(current.value);
+      array.push((callback) ? callback(root.value) : root.value);
       if (current.left) queue.push(current.left);
       if (current.right) queue.push(current.right);
       queue.shift();
@@ -86,7 +86,7 @@ const tree = (array) => {
     if (!root) return null;
     let array = [];
     if (root.left) array = array.concat(inorder(root.left));
-    array.push(root.value);
+    array.push((callback) ? callback(root.value) : root.value);
     if (root.right) array = array.concat(inorder(root.right));
     return array;
   }
@@ -94,7 +94,7 @@ const tree = (array) => {
   function preorder(root = this.root, callback = undefined) {
     if (!root) return null;
     let array = [];
-    array.push(root.value);
+    array.push((callback) ? callback(root.value) : root.value);
     if (root.left) array = array.concat(preorder(root.left));
     if (root.right) array = array.concat(preorder(root.right));
     return array;
@@ -105,7 +105,7 @@ const tree = (array) => {
     let array = [];
     if (root.left) array = array.concat(postorder(root.left, callback));
     if (root.right) array = array.concat(postorder(root.right, callback));
-    array.push(root.value);
+    array.push((callback) ? callback(root.value) : root.value);
     return array;
   }
 
@@ -117,17 +117,6 @@ const tree = (array) => {
     return Math.max(leftH, rightH) + 1;
   }
 
-  // CHECK FIX FIGURE OUT
-  function depthRec(value, root = this.root) {
-    if (!root) return -Infinity;
-    if (value > root.value) {
-      return depthRec(root.right, value) + 1;
-    } if (value < root.value) {
-      return depthRec(root.left, value) + 1;
-    }
-    return 1;
-  }
-
   // FINISHED
   function balancedCheck(root = this.root) {
     let leftH = height(root.left); // Left Subtree Height
@@ -136,9 +125,19 @@ const tree = (array) => {
     return !(difference > 1);
   }
 
-  // CHECK DEPTH FUNCTIONS
+  // UNFINISHED
   function depth(value) {
-    let result = depthRec(this.root, value) - 1;
+    function depthRec(value, root = this.root) {
+      if (!root) return -Infinity;
+      if (value > root.value) {
+        return depthRec(root.right, value) + 1;
+      } if (value < root.value) {
+        return depthRec(root.left, value) + 1;
+      }
+      return 1;
+    }
+
+    let result = depthRec(value) - 1;
     return (result >= 0) ? result : null;
   }
 
