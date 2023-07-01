@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const prettyPrint = (node, prefix = '', isLeft = true) => {
   if (node === null) return;
   if (node.right !== null) {
