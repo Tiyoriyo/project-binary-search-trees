@@ -134,7 +134,7 @@ const tree = (array) => {
     let leftH = heightRec(root.left);
     let rightH = heightRec(root.right);
     let difference = (leftH - rightH) * -1;
-    return !((difference > 1));
+    return !(difference > 1);
   }
 
   function rebalance(root) {
