@@ -208,35 +208,40 @@ const tree = (array) => {
   };
 };
 
-const treeArray = tree([15, 50, 5, 0, 75, 25, 65]);
-// 2, 3, 4, 5, 6, 8, 10
+function arrayNumbers() {
+  let array = [];
 
-treeArray.insertValue(65);
-treeArray.insertValue(63);
-treeArray.insertValue(52);
-treeArray.insertValue(51);
-treeArray.insertValue(49);
-treeArray.insertValue(53);
-treeArray.insertValue(54);
-treeArray.insertValue(55);
-treeArray.makeBalanced();
+  for (let i = 0; i < 15; i += 1) {
+    let number = Math.floor(Math.random() * 100);
+    while (number > 100) {
+      number = Math.floor(Math.random() * 100);
+    }
+    array.push(number);
+  }
+  return array;
+}
 
-// console.log(treeArray.levelOrder());
-// console.log('Inorder:', treeArray.inorder());
-// console.log('Preorder:', treeArray.preorder());
-// console.log('Postorder:', treeArray.postorder());
-console.log(treeArray.balancedCheck());
-console.log(prettyPrint(treeArray.root));
+function driverScript() {
+  const treeArray = tree(arrayNumbers());
+  console.log(prettyPrint(treeArray.root));
+  console.log(treeArray.balancedCheck());
+  console.log('Pre Order: ', treeArray.preorder());
+  console.log('In Order: ', treeArray.inorder());
+  console.log('Post Order: ', treeArray.postorder());
+  (() => {
+    for (let i = 0; i < 15; i += 1) {
+      let number = Math.floor(Math.random() * 2000);
+      treeArray.insertValue(number);
+    }
+  })();
+  console.log(prettyPrint(treeArray.root));
+  console.log('Balance Check: ', treeArray.balancedCheck());
+  treeArray.makeBalanced();
+  console.log(prettyPrint(treeArray.root));
+  console.log('Balance Check: ', treeArray.balancedCheck());
+  console.log('Pre Order: ', treeArray.preorder());
+  console.log('In Order: ', treeArray.inorder());
+  console.log('Post Order: ', treeArray.postorder());
+}
 
-// if (start > end) return null;
-// const mid = Math.floor((start + end) / 2);
-// const root = node(data[mid]);
-// root.setLeft(buildTree(start, mid - 1));
-// root.setRight(buildTree(mid + 1, end));
-// return root;
-
-// 3, 1, 2, 4
-// 1, 2, 3, 4   Mid = index 1;  mid - 1 = 0; mid + 1 = 2; Root = Node(2);
-// [1], /2/, [3, 4]
-// 1 Root = 0; buildTree(0, 0-1)
-// buildTreeRight(1, 0)
+driverScript();
