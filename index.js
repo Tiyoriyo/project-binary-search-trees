@@ -13,6 +13,7 @@ const tree = (array) => {
     duplicateRemover(array),
   );
 
+  // FINISHED
   function buildTree(start, end) {
     if (start > end) return null;
     const mid = Math.floor((start + end) / 2);
@@ -22,6 +23,7 @@ const tree = (array) => {
     return root;
   }
 
+  // FINISHED
   function insertVal(value, root = this.root) {
     if (root === null) return node(value);
     if (value > root.value) {
@@ -38,23 +40,26 @@ const tree = (array) => {
     return temp.value;
   }
 
-  function deleteVal(value, root = this.root) {
-    if (!root.left && !root.right) return null;
-    if (value < root.value) {
-      root.left = deleteVal(value, root.left);
-    } else if (value > root.value) {
-      root.right = deleteVal(value, root.right);
-    } else { // If root value equals given value
-      if (root.left && !root.right) return root.left;
-      if (root.right && !root.left) return root.right;
-      if (root.right && root.left) {
-        let tempValue = findMin(root);
-        root.value = tempValue;
-        root.right = deleteVal(tempValue, root.right);
-        return root;
+  function deleteVal(value) {
+    const deleteRec = (value, root) => {
+      if (!root.left && !root.right) return null;
+      if (value < root.value) {
+        root.left = deleteRec(value, root.left);
+      } else if (value > root.value) {
+        root.right = deleteRec(value, root.right);
+      } else { // If root value equals given value
+        if (root.left && !root.right) return root.left;
+        if (root.right && !root.left) return root.right;
+        if (root.right && root.left) {
+          let tempValue = findMin(root);
+          root.value = tempValue;
+          root.right = deleteRec(tempValue, root.right);
+          return root;
+        }
       }
-    }
-    return root;
+      return root;
+    };
+    this.root = deleteRec(value, this.root);
   }
 
   function find(value, root = this.root) {
@@ -144,7 +149,9 @@ const tree = (array) => {
   // FINISHED
   function rebalance() {
     let values = inorder(this.root); // Retrieve current values via traversal method
-    data = mergeSort(duplicateRemover(values)); // Sort values
+    data = mergeSort( // Sort values
+      duplicateRemover(values),
+    );
     this.root = buildTree(0, data.length - 1); // Replace current root with new balanced tree
   }
 
@@ -200,4 +207,9 @@ function driverScript() {
   console.log('Post Order: ', treeArray.postorder());
 }
 
-driverScript();
+// driverScript();
+
+// const treeArray = tree([0, 59, 23, 56, 47, 89, 48, 39, 6, 39, 28, 5, 4, 3, 45, 6, 7, 8]);
+const treeArray = tree([23, 5]);
+treeArray.deleteVal(5);
+console.log(prettyPrint(treeArray.root));
