@@ -126,6 +126,13 @@ const tree = (array) => {
     return 1;
   }
 
+  function isBalanced(root) {
+    let leftH = heightRec(root.left);
+    let rightH = heightRec(root.right);
+    let difference = (leftH - rightH) * -1;
+    return !((difference > 1));
+  }
+
   function insertValue(value) {
     this.root = insertRec(this.root, value);
   }
@@ -163,6 +170,10 @@ const tree = (array) => {
     return (result >= 0) ? result : null;
   }
 
+  function balancedCheck() {
+    return isBalanced(this.root);
+  }
+
   return {
     root: buildTree(0, data.length - 1),
     insertValue,
@@ -174,21 +185,22 @@ const tree = (array) => {
     postorder,
     height,
     depth,
+    balancedCheck,
   };
 };
 
-const treeArray = tree([50, 25, 5, 0, 75, 15]);
+const treeArray = tree([15, 50, 5, 0, 75, 25, 65, 63, 52]);
 // 2, 3, 4, 5, 6, 8, 10
 
-treeArray.insertValue(65);
-treeArray.insertValue(63);
-treeArray.insertValue(52);
+// treeArray.insertValue(65);
+// treeArray.insertValue(63);
+// treeArray.insertValue(52);
 
 // console.log(treeArray.levelOrder());
 // console.log('Inorder:', treeArray.inorder());
 // console.log('Preorder:', treeArray.preorder());
 // console.log('Postorder:', treeArray.postorder());
-console.log('Depth:', treeArray.depth(5));
+console.log(treeArray.balancedCheck());
 console.log(prettyPrint(treeArray.root));
 
 // if (start > end) return null;
