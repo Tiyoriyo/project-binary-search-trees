@@ -3,10 +3,11 @@
 /* eslint-disable no-shadow */
 /* eslint-disable prefer-const */
 /* eslint-disable import/extensions */
-import node from './node.js';
-import mergeSort from './mergeSort.js';
-import duplicateRemover from './duplicateRemover.js';
-import prettyPrint from './prettyPrint.js';
+import node from './modules/node.js';
+import mergeSort from './modules/mergeSort.js';
+import duplicateRemover from './modules/duplicateRemover.js';
+import prettyPrint from './modules/prettyPrint.js';
+import arrayNumbers from './modules/randNumGen.js';
 
 const tree = (array) => {
   let data = mergeSort( // Returns Sorted Array with duplicates removed.
@@ -175,19 +176,7 @@ const tree = (array) => {
   };
 };
 
-function arrayNumbers() {
-  let array = [];
-
-  for (let i = 0; i < 15; i += 1) {
-    let number = Math.floor(Math.random() * 100);
-    while (number > 100) {
-      number = Math.floor(Math.random() * 100);
-    }
-    array.push(number);
-  }
-  return array;
-}
-
+// eslint-disable-next-line no-unused-vars
 function driverScript() {
   const treeArray = tree(arrayNumbers());
   console.log(prettyPrint(treeArray.root));
@@ -211,4 +200,4 @@ function driverScript() {
   console.log('Post Order: ', treeArray.postorder());
 }
 
-driverScript();
+// driverScript();
